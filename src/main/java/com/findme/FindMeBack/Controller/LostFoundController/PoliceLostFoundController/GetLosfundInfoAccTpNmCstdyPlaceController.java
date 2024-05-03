@@ -1,4 +1,4 @@
-/*분류별, 지역별, 기간별 습득물 정보 조회 (색상 제외)*/
+/*습득물 명칭, 보관 장소별 습득물 정보 조회*/
 package com.findme.FindMeBack.Controller.LostFoundController.PoliceLostFoundController;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -24,20 +24,15 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-public class GetLostfundInfoAccToClAreaPdController {
+public class GetLosfundInfoAccTpNmCstdyPlaceController {
 
-    @PostMapping("/api-police-find-with-date")
-    public List<Item> PoliceFindWithDate(@RequestBody SearchItemsWithDate items) throws IOException {
+    @PostMapping("/api-police-find-with-place")
+    public List<Item> PoliceFindWithPlace(@RequestBody SearchItemsWithPlace items) throws IOException {
         // 경찰청 API URL 생성
-        StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1320000/LosfundInfoInqireService/getLosfundInfoAccToClAreaPd");
+        StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1320000/LosfundInfoInqireService/getLosfundInfoAccTpNmCstdyPlace");
         urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=4CJYgVugQHbEfSLvdMoGGPFz4Ms%2BrbiUxEk555iigL9ledz0QFEjxOD1mXDCTP0Ziu5%2FHJQ2bYkUTshjquNArg%3D%3D");
-        urlBuilder.append("&" + URLEncoder.encode("PRDT_CL_CD_01","UTF-8") + "=" + URLEncoder.encode(items.getPRDT_CL_CD_01() != null ? items.getPRDT_CL_CD_01() : "", "UTF-8"));
-        urlBuilder.append("&" + URLEncoder.encode("PRDT_CL_CD_02","UTF-8") + "=" + URLEncoder.encode(items.getPRDT_CL_CD_02() != null ? items.getPRDT_CL_CD_02() : "", "UTF-8"));
-        urlBuilder.append("&" + URLEncoder.encode("START_YMD","UTF-8") + "=" + URLEncoder.encode(items.getSTART_YMD() != null ? items.getSTART_YMD() : "", "UTF-8"));
-        urlBuilder.append("&" + URLEncoder.encode("END_YMD","UTF-8") + "=" + URLEncoder.encode(items.getEND_YMD() != null ? items.getEND_YMD() : "", "UTF-8"));
-        urlBuilder.append("&" + URLEncoder.encode("N_FD_LCT_CD","UTF-8") + "=" + URLEncoder.encode(items.getN_FD_LCT_CD() != null ? items.getN_FD_LCT_CD() : "", "UTF-8"));
-
-        // 페이지 번호와 결과 수 설정
+        urlBuilder.append("&" + URLEncoder.encode("PRDT_NM","UTF-8") + "=" + URLEncoder.encode(items.getPRDT_NM() != null ? items.getPRDT_NM() : "", "UTF-8"));
+        urlBuilder.append("&" + URLEncoder.encode("DEP_PLACE","UTF-8") + "=" + URLEncoder.encode(items.getDEP_PLACE() != null ? items.getDEP_PLACE() : "", "UTF-8"));
         urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지번호*/
         urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("10", "UTF-8")); /*한 페이지 결과 수*/
 
@@ -67,7 +62,7 @@ public class GetLostfundInfoAccToClAreaPdController {
     }
 
     // JSON 문자열을 객체로 변환하는 메서드
-    private List<Item> jsonToObject(String jsonInput, SearchItemsWithDate items) throws JsonProcessingException {
+    private List<Item> jsonToObject(String jsonInput, SearchItemsWithPlace items) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         List<Item> itemList = new ArrayList<>();
         try {
@@ -124,12 +119,9 @@ public class GetLostfundInfoAccToClAreaPdController {
     // 분실물 정보 조회 시 필요한 파라미터들 저장 클래스
     @Getter
     @Setter
-    public static class SearchItemsWithDate {
-        public String PRDT_CL_CD_01;  // 대분류 코드
-        public String PRDT_CL_CD_02;  // 중분류 코드
-        public String START_YMD;      // 검색 시작일
-        public String END_YMD;        // 검색 종료일
-        public String N_FD_LCT_CD;    // 습득지역 코드
+    public static class SearchItemsWithPlace {
+        public String PRDT_NM;      // 물품명
+        public String DEP_PLACE;    // 보관장소
     }
 
     // API 응답 내용 저장 클래스
@@ -152,7 +144,7 @@ public class GetLostfundInfoAccToClAreaPdController {
         public static class Body {
             private int pageNo;
             private int totalCount;
-            private int numOfRows; // numOfRows 필드 추가
+            private int numOfRows;
             private Object items;
         }
     }
