@@ -1,8 +1,5 @@
-/*습득물 상세정보 조회*/
 package com.findme.FindMeBack.Controller.LostFoundController.PoliceLostFoundController;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -24,12 +21,15 @@ import java.util.Date;
 public class GetLosfundDetailInfoController {
 
     @PostMapping("/api-police-find-detail-info")
-    public Item PoliceFindWithDetail(@RequestBody SearchItemsWithDetail request) throws IOException {
+    public Item policeFindWithDetail(@RequestBody SearchItemsWithDetail items) throws IOException {
+        String ATC_ID = items.getATC_ID();
+        String FD_SN = items.getFD_SN();
+
         // 경찰청 API URL 생성
         StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1320000/LosfundInfoInqireService/getLosfundDetailInfo");
         urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=4CJYgVugQHbEfSLvdMoGGPFz4Ms%2BrbiUxEk555iigL9ledz0QFEjxOD1mXDCTP0Ziu5%2FHJQ2bYkUTshjquNArg%3D%3D");
-        urlBuilder.append("&" + URLEncoder.encode("ATC_ID", "UTF-8") + "=" + URLEncoder.encode(request.getAtcId(), "UTF-8")); /*관리ID*/
-        urlBuilder.append("&" + URLEncoder.encode("FD_SN", "UTF-8") + "=" + URLEncoder.encode(request.getFdSn(), "UTF-8")); /*습득순번*/
+        urlBuilder.append("&" + URLEncoder.encode("ATC_ID", "UTF-8") + "=" + URLEncoder.encode(ATC_ID, "UTF-8")); /*관리ID*/
+        urlBuilder.append("&" + URLEncoder.encode("FD_SN", "UTF-8") + "=" + URLEncoder.encode(FD_SN, "UTF-8")); /*습득순번*/
 
         // HTTP 연결 설정
         URL url = new URL(urlBuilder.toString());
@@ -53,22 +53,14 @@ public class GetLosfundDetailInfoController {
         conn.disconnect();
 
         // JSON을 객체로 변환하여 반환
-        return jsonToObject(xmlToJson(sb.toString()), request);
+        return jsonToObject(xmlToJson(sb.toString()));
     }
 
     // JSON 문자열을 객체로 변환하는 메서드
-    private Item jsonToObject(String jsonInput, SearchItemsWithDetail request) throws JsonProcessingException {
+    private Item jsonToObject(String jsonInput) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
-        Item item = null;
-        try {
-            LostItemDetailResponse response = objectMapper.readValue(jsonInput, LostItemDetailResponse.class);
-            if (response != null && response.getResponse() != null && response.getResponse().getBody() != null && response.getResponse().getBody().getItem() != null) {
-                item = response.getResponse().getBody().getItem();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return item;
+        LostItemsResponse response = objectMapper.readValue(jsonInput, LostItemsResponse.class);
+        return response != null ? response.getResponse().getBody().getItem() : null;
     }
 
     // XML을 JSON으로 변환하는 메서드
@@ -115,37 +107,37 @@ public class GetLosfundDetailInfoController {
     @Getter
     @Setter
     public static class SearchItemsWithDetail {
-        public String atcId;  // 관리 ID
-        public String fdSn;   // 습득 순번
+        public String ATC_ID;  // 관리 ID
+        public String FD_SN;   // 습득 순번
     }
 
-    // API 응답 내용 저장 클래스
+    // API 응답 클래스
     @Getter
     @Setter
-    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class LostItemsResponse {
+        private Response response;
+    }
+
+    // API 응답의 Header 클래스
+    @Getter
+    @Setter
     public static class Response {
         private Header header;
         private Body body;
-
-        @Getter
-        @Setter
-        public static class Header {
-            private String resultCode;
-            private String resultMsg;
-        }
-
-        @Getter
-        @Setter
-        public static class Body {
-            private Item item;
-        }
     }
 
-    // API 응답 전체 내용 저장 클래스
+    // API 응답의 Header 내부 클래스
     @Getter
     @Setter
-    public static class LostItemDetailResponse {
-        @JsonProperty("response")
-        private Response response;
+    public static class Header {
+        private String resultCode;
+        private String resultMsg;
+    }
+
+    // API 응답의 Body 내부 클래스
+    @Getter
+    @Setter
+    public static class Body {
+        private Item item;
     }
 }
