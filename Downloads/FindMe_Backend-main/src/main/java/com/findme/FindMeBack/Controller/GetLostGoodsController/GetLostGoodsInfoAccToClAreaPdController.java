@@ -112,14 +112,14 @@ public class GetLostGoodsInfoAccToClAreaPdController {
 
     @CrossOrigin
     @PostMapping("/api-with-date")
-    public List<ThingDto> SearchLostGoodsInfoWithDate(@RequestParam String START_YMD, String END_YMD, String PRDT_CL_CD_01, String PRDT_CL_CD_02, String LST_LCT_CD, String pageNo, String numOfRows) throws IOException {
+    public List<ThingDto> SearchLostGoodsInfoWithDate(@RequestParam String START_YMD, String END_YMD, String PRDT_CL_CD_01, String PRDT_CL_CD_02, String N_FD_LCT_CD, String pageNo, String numOfRows) throws IOException {
         StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1320000/LostGoodsInfoInqireService/getLostGoodsInfoAccToClAreaPd"); /*URL*/
         urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "=fVg%2Fd%2B77uSYbcluuIdMhpTM19L7TlHmcV6uHQpnExlDlF5%2Fr3JiiS1dM8yJtHB0kzwvqvS3VWpoKOcfg7L3PGg%3D%3D"); /*Service Key*/
         urlBuilder.append("&" + URLEncoder.encode("START_YMD","UTF-8") + "=" + URLEncoder.encode(START_YMD, "UTF-8")); /*분실물 등록날짜*/
         urlBuilder.append("&" + URLEncoder.encode("END_YMD","UTF-8") + "=" + URLEncoder.encode(END_YMD, "UTF-8")); /*분실물 등록날짜*/
         urlBuilder.append("&" + URLEncoder.encode("PRDT_CL_CD_01","UTF-8") + "=" + URLEncoder.encode(PRDT_CL_CD_01, "UTF-8")); /*상위물품코드*/
         urlBuilder.append("&" + URLEncoder.encode("PRDT_CL_CD_02","UTF-8") + "=" + URLEncoder.encode(PRDT_CL_CD_02, "UTF-8")); /*하위물품코드*/
-        urlBuilder.append("&" + URLEncoder.encode("LST_LCT_CD","UTF-8") + "=" + URLEncoder.encode(LST_LCT_CD, "UTF-8")); /*분실지역코드*/
+        urlBuilder.append("&" + URLEncoder.encode("N_FD_LCT_CD","UTF-8") + "=" + URLEncoder.encode(N_FD_LCT_CD, "UTF-8")); /*분실지역코드*/
         urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode(pageNo, "UTF-8")); /*페이지 번호*/
         urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode(numOfRows, "UTF-8")); /*목록 건수*/
         URL url = new URL(urlBuilder.toString());

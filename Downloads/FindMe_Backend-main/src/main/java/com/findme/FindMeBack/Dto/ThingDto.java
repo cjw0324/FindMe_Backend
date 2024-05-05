@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class ThingDto {
     private Long rnum;
-    private  String lstYmd;
+    private String lstYmd;
     private String atcId;
     private String prdtClNm;
     private String lstPrdtNm;
