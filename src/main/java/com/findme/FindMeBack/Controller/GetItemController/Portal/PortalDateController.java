@@ -1,10 +1,7 @@
 package com.findme.FindMeBack.Controller.GetItemController.Portal;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.Getter;
-import lombok.Setter;
+import com.findme.FindMeBack.Controller.GetItemController.Portal.PortalDateDto.*;
 import org.json.JSONObject;
 import org.json.XML;
 import org.springframework.http.HttpStatus;
@@ -21,7 +18,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 
@@ -98,72 +94,6 @@ public class PortalDateController {
 
     // 내부 클래스들
 
-    @Getter
-    @Setter
-    public class Item {
-        private String atcId;
-        private String depPlace;
-        private String fdFilePathImg;
-        private String fdPrdtNm;
-        private String fdSbjt;
-        private String fdSn;
-        private Date fdYmd;
-        private String prdtClNm;
-        private String rnum;
-
-    }
-    @Getter
-    @Setter
-    public class Items {
-        @JsonProperty("item")
-        private List<Item> item;
-
-    }
-
-    @Getter
-    @Setter
-    public class SearchItemsWithDate {
-        public String PRDT_CL_CD_01;
-        public String PRDT_CL_CD_02;
-        public String N_FD_LCT_CD;
-        public String START_YMD;
-        public String END_YMD;
-    }
-
-    @Getter
-    @Setter
-    public class Response {
-        private Header header;
-        private Body body;
-
-        @Getter
-        @Setter
-        public class Header {
-            private String resultCode;
-            private String resultMsg;
-        }
-
-        @Getter
-        @Setter
-        public class Body {
-            private int pageNo;
-            private int totalCount;
-            private int numOfRows;
-            private Items items;
-        }
-    }
-
-    @Getter
-    @Setter
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    public class LostItemsResponse {
-        @JsonProperty("response")
-        private Response response;
-
-        public Items getItems() {
-            return response.getBody().getItems();
-        }
-    }
 
 
     private List<Item> jsonToObject(String jsonInput) {

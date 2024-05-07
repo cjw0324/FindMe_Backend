@@ -1,12 +1,11 @@
 package com.findme.FindMeBack.Controller.GetItemController.Portal;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import lombok.Getter;
-import lombok.Setter;
+import com.findme.FindMeBack.Controller.GetItemController.Portal.PortalLocationDto.Item;
+import com.findme.FindMeBack.Controller.GetItemController.Portal.PortalLocationDto.LostItemsResponse;
+import com.findme.FindMeBack.Controller.GetItemController.Portal.PortalLocationDto.SearchItemsWithLocation;
 import org.json.JSONObject;
 import org.json.XML;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +20,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -108,62 +106,6 @@ public class PortalLocationController {
             e.printStackTrace();
             return null;
         }
-    }
-
-    // 분실물 항목에 대한 정보 저장 클래스
-    @Getter
-    @Setter
-    public static class Item {
-        private String fdSbjt; // 제목
-        private String rnum;   // 순번
-        private String atcId;  // 아이디
-        private String addr;   // 기관도로명주소
-        private String fdSn;   // 일련번호
-        private String depPlace;  // 습득 장소
-        private String prdtClNm;  // 재품 분류명
-        private Date fdYmd;       // 분실 일자
-        private String fdPrdtNm;  // 제품 이름
-    }
-
-    // 분실물 정보 조회 시 필요한 파라미터들 저장 클래스
-    @Getter
-    @Setter
-    public static class SearchItemsWithLocation {
-        public String PRDT_NM;      // 물품명
-        public String ADDR;         // 기관 도로명 주소
-    }
-
-    // API 응답 내용 저장 클래스
-    @Getter
-    @Setter
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Response {
-        private Header header;
-        private Body body;
-
-        @Getter
-        @Setter
-        public static class Header {
-            private String resultCode;
-            private String resultMsg;
-        }
-
-        @Getter
-        @Setter
-        public static class Body {
-            private int pageNo;
-            private int totalCount;
-            private int numOfRows;
-            private Object items;
-        }
-    }
-
-    // API 응답 전체 내용 저장 클래스
-    @Getter
-    @Setter
-    public static class LostItemsResponse {
-        @JsonProperty("response")
-        private Response response;
     }
 
 }

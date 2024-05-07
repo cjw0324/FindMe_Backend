@@ -1,12 +1,12 @@
 package com.findme.FindMeBack.Controller.GetItemController.Portal;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 //import com.findme.FindMeBack.Controller.LostFoundController.PoliceLostFoundController.GetLosfundInfoAccTpNmCstdyPlaceController;
-import lombok.Getter;
-import lombok.Setter;
+import com.findme.FindMeBack.Controller.GetItemController.Portal.PortalPlaceDto.Item;
+import com.findme.FindMeBack.Controller.GetItemController.Portal.PortalPlaceDto.LostItemsResponse;
+import com.findme.FindMeBack.Controller.GetItemController.Portal.PortalPlaceDto.SearchItemsWithPlace;
 import org.json.JSONObject;
 import org.json.XML;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +21,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -101,55 +100,4 @@ public class PortalPlaceController {
         }
     }
 
-    @Getter
-    @Setter
-    public static class Item {
-        private String fdSbjt;
-        private String rnum;
-        private String atcId;
-        private String fdFilePathImg;
-        private String fdSn;
-        private String depPlace;
-        private String prdtClNm;
-        private Date fdYmd;
-        private String fdPrdtNm;
-        private String clrNm;
-    }
-
-    @Getter
-    @Setter
-    public static class SearchItemsWithPlace {
-        public String PRDT_NM;
-        public String DEP_PLACE;
-    }
-
-    @Getter
-    @Setter
-    public static class Response {
-        private Response.Header header;
-        private Response.Body body;
-
-        @Getter
-        @Setter
-        public static class Header {
-            private String resultCode;
-            private String resultMsg;
-        }
-
-        @Getter
-        @Setter
-        public static class Body {
-            private int pageNo;
-            private int totalCount;
-            private int numOfRows;
-            private Object items;
-        }
-    }
-
-    @Getter
-    @Setter
-    public static class LostItemsResponse {
-        @JsonProperty("response")
-        private Response response;
-    }
 }

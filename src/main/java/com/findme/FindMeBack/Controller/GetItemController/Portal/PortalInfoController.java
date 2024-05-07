@@ -1,12 +1,11 @@
 package com.findme.FindMeBack.Controller.GetItemController.Portal;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import lombok.Getter;
-import lombok.Setter;
+import com.findme.FindMeBack.Controller.GetItemController.Portal.PortalInfoDto.Item;
+import com.findme.FindMeBack.Controller.GetItemController.Portal.PortalInfoDto.LostItemsResponse;
+import com.findme.FindMeBack.Controller.GetItemController.Portal.PortalInfoDto.SearchItemsWithDetail;
 import org.json.JSONObject;
 import org.json.XML;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +17,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -112,65 +110,4 @@ public class PortalInfoController {
         }
     }
 
-    // 분실물 항목에 대한 정보 저장 클래스
-    @Getter
-    @Setter
-    public static class Item {
-        private String atcId;            // 관리 ID
-        private String csteSteNm;        // 보관 상태명
-        private String depPlace;         // 보관장소
-        private String fdFilePathImg;    // 사진 파일 경로
-        private String fdHor;            // 습득 시간
-        private String fdPlace;          // 습득 장소
-        private String fdPrdtNm;         // 물품명
-        private String fdSn;             // 습득 순번
-        private Date fdYmd;              // 습득 일자
-        private String fndKeepOrgnSeNm; // 습득물 보관 기관 구분명
-        private String orgId;            // 기관 아이디
-        private String orgNm;            // 기관명
-        private String prdtClNm;         // 물품 분류명
-        private String tel;              // 전화번호
-        private String uniq;             // 특이사항
-    }
-
-    // 분실물 정보 조회 시 필요한 파라미터들 저장 클래스
-    @Getter
-    @Setter
-    public static class SearchItemsWithDetail {
-        public String ATC_ID;  // 관리 ID
-        public String FD_SN;   // 습득 순번
-    }
-
-    // API 응답 내용 저장 클래스
-    @Getter
-    @Setter
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Response {
-        private Header header;
-        private Body body;
-
-        @Getter
-        @Setter
-        public static class Header {
-            private String resultCode;
-            private String resultMsg;
-        }
-
-        @Getter
-        @Setter
-        public static class Body {
-            private int pageNo;
-            private int totalCount;
-            private int numOfRows; // numOfRows 필드 추가
-            private Object item;
-        }
-    }
-
-    // API 응답 전체 내용 저장 클래스
-    @Getter
-    @Setter
-    public static class LostItemsResponse {
-        @JsonProperty("response")
-        private Response response;
-    }
 }
