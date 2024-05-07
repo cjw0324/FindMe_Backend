@@ -1,17 +1,16 @@
-package com.findme.FindMeBack.Controller.LostFoundController.PotalLostFoundController;
+/*습득물 위치기반 조회*/
+package com.findme.FindMeBack.Controller.LostFoundController.PoliceLostFoundController;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.findme.FindMeBack.Controller.LostFoundController.PoliceLostFoundController.GetLosfundInfoAccTpNmCstdyPlaceController;
 import lombok.Getter;
 import lombok.Setter;
 import org.json.JSONObject;
 import org.json.XML;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,22 +24,31 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-public class GetPtLosfundInfoAccTpNmCstdyPlaceController {
+public class GetLosfundInfoAccToLcController {
 
-    @PostMapping("/api-find-with-place")
-    public List<Item> FindWithPlace(@RequestBody SearchItemsWithPlace items) throws IOException {
-        StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1320000/LosfundInfoInqireService/getLosfundInfoAccTpNmCstdyPlace");
-        urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=8ECKU3vHd0sG4PqlShJ3i5t8igUqcvY5pLJIODwzsvUuYgFh7Gw%2BYb81Zcras26oH6oJY%2FW%2FqznXyBmrG6%2FrcA%3D%3D");
+    @PostMapping("/api-police-find-with-lc")
+    public List<Item> PoliceFindWithLc(@RequestParam(required = false) Integer pageNo, @RequestBody SearchItemsWithLc items) throws IOException {
+        // API URL 생성
+        StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1320000/LosfundInfoInqireService/getLosfundInfoAccToLc");
+        urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=4CJYgVugQHbEfSLvdMoGGPFz4Ms%2BrbiUxEk555iigL9ledz0QFEjxOD1mXDCTP0Ziu5%2FHJQ2bYkUTshjquNArg%3D%3D");
         urlBuilder.append("&" + URLEncoder.encode("PRDT_NM","UTF-8") + "=" + URLEncoder.encode(items.getPRDT_NM() != null ? items.getPRDT_NM() : "", "UTF-8"));
-        urlBuilder.append("&" + URLEncoder.encode("DEP_PLACE","UTF-8") + "=" + URLEncoder.encode(items.getDEP_PLACE() != null ? items.getDEP_PLACE() : "", "UTF-8"));
-        urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8"));
-        urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("10", "UTF-8"));
+        urlBuilder.append("&" + URLEncoder.encode("ADDR","UTF-8") + "=" + URLEncoder.encode(items.getADDR() != null ? items.getADDR() : "", "UTF-8"));
 
+        // 페이지 번호 추가
+        if (pageNo != null) {
+            urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode(pageNo.toString(), "UTF-8"));
+        }
+
+        // 페이지당 결과 수 설정
+        urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("10", "UTF-8")); /*한 페이지 결과 수*/
+
+        // HTTP 연결 설정
         URL url = new URL(urlBuilder.toString());
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
         conn.setRequestProperty("Content-type", "application/json");
 
+        // 응답 처리
         BufferedReader rd;
         if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
             rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -55,10 +63,12 @@ public class GetPtLosfundInfoAccTpNmCstdyPlaceController {
         rd.close();
         conn.disconnect();
 
+        // JSON을 객체로 변환하여 반환
         return jsonToObject(xmlToJson(sb.toString()), items);
     }
 
-    private List<Item> jsonToObject(String jsonInput, SearchItemsWithPlace items) throws JsonProcessingException {
+    // JSON 문자열을 객체로 변환하는 메서드
+    private List<Item> jsonToObject(String jsonInput, SearchItemsWithLc items) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         List<Item> itemList = new ArrayList<>();
         try {
@@ -78,11 +88,13 @@ public class GetPtLosfundInfoAccTpNmCstdyPlaceController {
         return itemList;
     }
 
+    // XML을 JSON으로 변환하는 메서드
     private String xmlToJson(String str) {
         try {
             if (str == null) {
-                return null;
+                return null; // 문자열이 null이면 null을 반환
             }
+
             String xml = str;
             JSONObject jObject = XML.toJSONObject(xml);
             ObjectMapper mapper = new ObjectMapper();
@@ -95,33 +107,36 @@ public class GetPtLosfundInfoAccTpNmCstdyPlaceController {
         }
     }
 
+    // 분실물 항목에 대한 정보 저장 클래스
     @Getter
     @Setter
     public static class Item {
-        private String fdSbjt;
-        private String rnum;
-        private String atcId;
-        private String fdFilePathImg;
-        private String fdSn;
-        private String depPlace;
-        private String prdtClNm;
-        private Date fdYmd;
-        private String fdPrdtNm;
-        private String clrNm;
+        private String fdSbjt; // 제목
+        private String rnum;   // 순번
+        private String atcId;  // 아이디
+        private String addr;   // 기관도로명주소
+        private String fdSn;   // 일련번호
+        private String depPlace;  // 습득 장소
+        private String prdtClNm;  // 재품 분류명
+        private Date fdYmd;       // 분실 일자
+        private String fdPrdtNm;  // 제품 이름
     }
 
+    // 분실물 정보 조회 시 필요한 파라미터들 저장 클래스
     @Getter
     @Setter
-    public static class SearchItemsWithPlace {
-        public String PRDT_NM;
-        public String DEP_PLACE;
+    public static class SearchItemsWithLc {
+        public String PRDT_NM;      // 물품명
+        public String ADDR;         // 기관 도로명 주소
     }
 
+    // API 응답 내용 저장 클래스
     @Getter
     @Setter
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Response {
-        private Response.Header header;
-        private Response.Body body;
+        private Header header;
+        private Body body;
 
         @Getter
         @Setter
@@ -140,6 +155,7 @@ public class GetPtLosfundInfoAccTpNmCstdyPlaceController {
         }
     }
 
+    // API 응답 전체 내용 저장 클래스
     @Getter
     @Setter
     public static class LostItemsResponse {

@@ -1,7 +1,6 @@
 package com.findme.FindMeBack.Controller.LostFoundController.PotalLostFoundController;
 
 
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -128,14 +127,14 @@ public class GetPtLosfundInfoAccToClAreaPdController {
     }
     @CrossOrigin
     @PostMapping("/api-find-with-date")
-    public List<Item> FindWithDate(@RequestParam String pageNo, String numOfRows, String PRDT_CL_CD_01, String PRDT_CL_CD_02, String CLR_CD, String START_YMD, String END_YMD, String N_FD_LCT_CD) throws IOException {
+    public List<Item> FindWithDate(@RequestParam String START_YMD, String END_YMD, String N_FD_LCT_CD) throws IOException {
         StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1320000/LosPtfundInfoInqireService/getPtLosfundInfoAccToClAreaPd"); /*URL*/
         urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "=fVg%2Fd%2B77uSYbcluuIdMhpTM19L7TlHmcV6uHQpnExlDlF5%2Fr3JiiS1dM8yJtHB0kzwvqvS3VWpoKOcfg7L3PGg%3D%3D"); /*Service Key*/
-        urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode(pageNo, "UTF-8")); /*페이지번호*/
-        urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode(numOfRows, "UTF-8")); /*한 페이지 결과 수*/
-        urlBuilder.append("&" + URLEncoder.encode("PRDT_CL_CD_01","UTF-8") + "=" + URLEncoder.encode(PRDT_CL_CD_01, "UTF-8")); /*대분류*/
-        urlBuilder.append("&" + URLEncoder.encode("PRDT_CL_CD_02","UTF-8") + "=" + URLEncoder.encode(PRDT_CL_CD_02, "UTF-8")); /*중분류*/
-        urlBuilder.append("&" + URLEncoder.encode("CLR_CD","UTF-8") + "=" + URLEncoder.encode(CLR_CD, "UTF-8")); /*습득물 색상*/
+        urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지번호*/
+        urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("10", "UTF-8")); /*한 페이지 결과 수*/
+        urlBuilder.append("&" + URLEncoder.encode("PRDT_CL_CD_01","UTF-8") + "=" ); /*대분류*/
+        urlBuilder.append("&" + URLEncoder.encode("PRDT_CL_CD_02","UTF-8") + "=" ); /*중분류*/
+        urlBuilder.append("&" + URLEncoder.encode("CLR_CD","UTF-8") + "=" ); /*습득물 색상*/
         urlBuilder.append("&" + URLEncoder.encode("START_YMD","UTF-8") + "=" + URLEncoder.encode(START_YMD, "UTF-8")); /*검색시작일*/
         urlBuilder.append("&" + URLEncoder.encode("END_YMD","UTF-8") + "=" + URLEncoder.encode(END_YMD, "UTF-8")); /*검색종료일*/
         urlBuilder.append("&" + URLEncoder.encode("N_FD_LCT_CD","UTF-8") + "=" + URLEncoder.encode(N_FD_LCT_CD, "UTF-8")); /*습득지역*/
