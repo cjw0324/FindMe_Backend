@@ -9,5 +9,5 @@ import lombok.Setter;
 public class Body {
     @Getter
     @Setter
-    private static Item item;
+    private Item item;
 }

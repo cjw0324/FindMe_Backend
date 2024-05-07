@@ -1,12 +1,11 @@
-package com.findme.FindMeBack.Controller.GetItemController.Police.Dto.PoliceDateDto;
+package com.findme.FindMeBack.Controller.GetItemController.Portal.PortalDateDto;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.findme.FindMeBack.Controller.GetItemController.Portal.PortalDateController;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Response {
     private Header header;
     private Body body;
@@ -17,12 +16,13 @@ public class Response {
         private String resultCode;
         private String resultMsg;
     }
+
     @Getter
     @Setter
     public class Body {
         private int pageNo;
         private int totalCount;
-        private int numOfRows; // numOfRows 필드 추가
-        private Object items;
+        private int numOfRows;
+        private Items items;
     }
 }
