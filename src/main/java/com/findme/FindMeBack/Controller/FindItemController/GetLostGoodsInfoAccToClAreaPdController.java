@@ -1,4 +1,4 @@
-package com.findme.FindMeBack.Controller.GetLostGoodsController;
+package com.findme.FindMeBack.Controller.FindItemController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

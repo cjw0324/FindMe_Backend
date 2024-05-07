@@ -1,17 +1,12 @@
 /*습득물 명칭, 보관 장소별 습득물 정보 조회*/
-package com.findme.FindMeBack.Controller.LostFoundController.PoliceLostFoundController;
+package com.findme.FindMeBack.Controller.GetItemController.Police;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import lombok.Getter;
-import lombok.Setter;
-import org.json.JSONObject;
-import org.json.XML;
+import com.findme.FindMeBack.Controller.GetItemController.Police.Dto.PolicePlaceDto.Item;
+import com.findme.FindMeBack.Controller.GetItemController.Police.Dto.PolicePlaceDto.LostItemsResponse;
+import com.findme.FindMeBack.Controller.GetItemController.Police.Dto.PolicePlaceDto.SearchItemsWithPlace;
 import org.springframework.web.bind.annotation.*;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -19,14 +14,15 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-@RestController
-public class GetLosfundInfoAccTpNmCstdyPlaceController {
+import static com.findme.FindMeBack.Controller.GetItemController.CommonFunction.Converter.xmlToJson;
 
-    @PostMapping("/api-police-find-with-place")
+@RestController
+public class PolicePlaceController {
+
+    @PostMapping("/police/place")
     public List<Item> PoliceFindWithPlace(@RequestParam(required = false) Integer pageNo, @RequestBody SearchItemsWithPlace items) throws IOException {
         // 경찰청 API URL 생성
         StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1320000/LosfundInfoInqireService/getLosfundInfoAccTpNmCstdyPlace");
@@ -64,11 +60,11 @@ public class GetLosfundInfoAccTpNmCstdyPlaceController {
         conn.disconnect();
 
         // JSON을 객체로 변환하여 반환
-        return jsonToObject(xmlToJson(sb.toString()), items);
+        return jsonToObject(xmlToJson(sb.toString()));
     }
 
     // JSON 문자열을 객체로 변환하는 메서드
-    private List<Item> jsonToObject(String jsonInput, SearchItemsWithPlace items) throws JsonProcessingException {
+    private List<Item> jsonToObject(String jsonInput) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         List<Item> itemList = new ArrayList<>();
         try {
@@ -88,78 +84,4 @@ public class GetLosfundInfoAccTpNmCstdyPlaceController {
         return itemList;
     }
 
-    // XML을 JSON으로 변환하는 메서드
-    private String xmlToJson(String str) {
-        try {
-            if (str == null) {
-                return null; // 문자열이 null이면 null을 반환
-            }
-
-            String xml = str;
-            JSONObject jObject = XML.toJSONObject(xml);
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.enable(SerializationFeature.INDENT_OUTPUT);
-            Object json = mapper.readValue(jObject.toString(), Object.class);
-            return mapper.writeValueAsString(json);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    // 분실물 항목에 대한 정보 저장 클래스
-    @Getter
-    @Setter
-    public static class Item {
-        private String fdSbjt; // 제목
-        private String rnum;   // 순번
-        private String atcId;  // 아이디
-        private String fdFilePathImg;  // 이미지 파일 경로
-        private String fdSn;   // 일련번호
-        private String depPlace;  // 습득 장소
-        private String prdtClNm;  // 재품 분류명
-        private Date fdYmd;       // 분실 일자
-        private String fdPrdtNm;  // 제품 이름
-    }
-
-    // 분실물 정보 조회 시 필요한 파라미터들 저장 클래스
-    @Getter
-    @Setter
-    public static class SearchItemsWithPlace {
-        public String PRDT_NM;      // 물품명
-        public String DEP_PLACE;    // 보관장소
-    }
-
-    // API 응답 내용 저장 클래스
-    @Getter
-    @Setter
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Response {
-        private Header header;
-        private Body body;
-
-        @Getter
-        @Setter
-        public static class Header {
-            private String resultCode;
-            private String resultMsg;
-        }
-
-        @Getter
-        @Setter
-        public static class Body {
-            private int pageNo;
-            private int totalCount;
-            private int numOfRows;
-            private Object items;
-        }
-    }
-
-    // API 응답 전체 내용 저장 클래스
-    @Getter
-    @Setter
-    public static class LostItemsResponse {
-        @JsonProperty("response")
-        private Response response;
-    }
 }
