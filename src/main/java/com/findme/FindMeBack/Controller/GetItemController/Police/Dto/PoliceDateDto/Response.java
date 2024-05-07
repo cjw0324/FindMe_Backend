@@ -8,8 +8,8 @@ import lombok.Setter;
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Response {
-    private Response.Header header;
-    private Response.Body body;
+    private Header header;
+    private Body body;
 
     @Getter
     @Setter
