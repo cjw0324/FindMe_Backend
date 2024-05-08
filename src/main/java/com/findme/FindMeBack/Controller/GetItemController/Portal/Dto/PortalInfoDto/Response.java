@@ -1,7 +1,9 @@
-package com.findme.FindMeBack.Controller.GetItemController.Police.Dto.PoliceInfoDto;
+package com.findme.FindMeBack.Controller.GetItemController.Portal.Dto.PortalInfoDto;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import com.findme.FindMeBack.Controller.GetItemController.Police.Dto.PoliceInfoDto.Body;
+import com.findme.FindMeBack.Controller.GetItemController.Police.Dto.PoliceInfoDto.Header;
 import lombok.Getter;
 import lombok.Setter;
 

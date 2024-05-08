@@ -1,13 +1,10 @@
 package com.findme.FindMeBack.Controller.GetItemController.Portal;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.findme.FindMeBack.Controller.GetItemController.Portal.PortalLocationDto.Item;
-import com.findme.FindMeBack.Controller.GetItemController.Portal.PortalLocationDto.LostItemsResponse;
-import com.findme.FindMeBack.Controller.GetItemController.Portal.PortalLocationDto.SearchItemsWithLocation;
-import org.json.JSONObject;
-import org.json.XML;
+import com.findme.FindMeBack.Controller.GetItemController.Portal.Dto.PortalLocationDto.*;
+import com.findme.FindMeBack.Controller.GetItemController.Portal.Dto.PortalLocationDto.SearchItemsWithLocation;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,9 +16,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+
+import static com.findme.FindMeBack.Controller.GetItemController.CommonFunction.Converter.xmlToJson;
 
 @RestController
 public class PortalLocationController {
@@ -65,47 +62,27 @@ public class PortalLocationController {
         conn.disconnect();
 
         // JSON을 객체로 변환하여 반환
-        return jsonToObject(xmlToJson(sb.toString()), items);
+        return LocationJsonToObject(xmlToJson(sb.toString()));
     }
 
     // JSON 문자열을 객체로 변환하는 메서드
-    private List<Item> jsonToObject(String jsonInput, SearchItemsWithLocation items) throws JsonProcessingException {
+    public static List<Item>LocationJsonToObject(String jsonResponse) {
         ObjectMapper objectMapper = new ObjectMapper();
-        List<Item> itemList = new ArrayList<>();
         try {
-            LostItemsResponse response = objectMapper.readValue(jsonInput, LostItemsResponse.class);
-            if (response != null && response.getResponse() != null && response.getResponse().getBody() != null && response.getResponse().getBody().getItems() != null) {
-                Object apiItems = response.getResponse().getBody().getItems();
-                if (apiItems instanceof List) {
-                    itemList = (List<Item>) apiItems;
-                } else if (apiItems instanceof Map) {
-                    Map<String, Item> itemMap = (Map<String, Item>) apiItems;
-                    itemList = new ArrayList<>(itemMap.values());
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return itemList;
-    }
+            JsonNode rootNode = objectMapper.readTree(jsonResponse);
+            JsonNode itemsNode = rootNode.path("response").path("body").path("items").path("item");
 
-    // XML을 JSON으로 변환하는 메서드
-    private String xmlToJson(String str) {
-        try {
-            if (str == null) {
-                return null; // 문자열이 null이면 null을 반환
+            if (itemsNode.isArray()) {
+                // itemsNode가 배열인 경우, 해당 배열을 List<Item>으로 변환
+                return objectMapper.convertValue(itemsNode, new TypeReference<List<Item>>(){});
+            } else {
+                // 단일 객체인 경우, 이 객체를 포함하는 리스트를 생성
+                Item singleItem = objectMapper.treeToValue(itemsNode, Item.class);
+                return List.of(singleItem);
             }
-
-            String xml = str;
-            JSONObject jObject = XML.toJSONObject(xml);
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.enable(SerializationFeature.INDENT_OUTPUT);
-            Object json = mapper.readValue(jObject.toString(), Object.class);
-            return mapper.writeValueAsString(json);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
-
 }

@@ -1,10 +1,9 @@
 package com.findme.FindMeBack.Controller.GetItemController.Police;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.findme.FindMeBack.Controller.GetItemController.Police.Dto.PoliceInfoDto.Item;
-import com.findme.FindMeBack.Controller.GetItemController.Police.Dto.PoliceInfoDto.LostItemsResponse;
-import com.findme.FindMeBack.Controller.GetItemController.Police.Dto.PoliceInfoDto.SearchItemsWithDetail;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.findme.FindMeBack.Controller.GetItemController.Police.Dto.PoliceInfoDto.*;
 import org.springframework.web.bind.annotation.*;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,6 +11,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.List;
 
 
 import static com.findme.FindMeBack.Controller.GetItemController.CommonFunction.Converter.xmlToJson;
@@ -52,15 +52,23 @@ public class PoliceInfoController {
         conn.disconnect();
 
         // JSON을 객체로 변환하여 반환
-        return InfoJsonToObject(xmlToJson(sb.toString()));
+        return DataJsonToObject(xmlToJson(sb.toString()));
     }
     // JSON 문자열을 객체로 변환하는 메서드
 
     // JSON 문자열을 객체로 변환하는 메서드
-    private Item InfoJsonToObject(String jsonInput) throws JsonProcessingException {
+
+    public static Item DataJsonToObject(String jsonResponse) {
         ObjectMapper objectMapper = new ObjectMapper();
-        LostItemsResponse response = objectMapper.readValue(jsonInput, LostItemsResponse.class);
-        return response != null ? response.getResponse().getBody().getItem() : null;
-    }
+        try {
+            JsonNode rootNode = objectMapper.readTree(jsonResponse);
+            JsonNode itemsNode = rootNode.path("response").path("body").path("item");
 
+            Item singleItem = objectMapper.treeToValue(itemsNode, Item.class);
+            return singleItem;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

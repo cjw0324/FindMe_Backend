@@ -1,4 +1,4 @@
-package com.findme.FindMeBack.Controller.GetItemController.Portal.PortalDateDto;
+package com.findme.FindMeBack.Controller.GetItemController.Portal.Dto.PortalDateDto;
 
 import lombok.Getter;
 import lombok.Setter;

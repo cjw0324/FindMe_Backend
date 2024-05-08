@@ -1,4 +1,4 @@
-package com.findme.FindMeBack.Controller.GetItemController.Portal.PortalPlaceDto;
+package com.findme.FindMeBack.Controller.GetItemController.Portal.Dto.PortalPlaceDto;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,5 +1,6 @@
 package com.findme.FindMeBack.Controller.GetItemController.Police.Dto.PolicePlaceDto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +17,8 @@ public class Item {
     private String fdSn;   // 일련번호
     private String depPlace;  // 습득 장소
     private String prdtClNm;  // 재품 분류명
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date fdYmd;       // 분실 일자
     private String fdPrdtNm;  // 제품 이름
+    private String clrNm;
 }

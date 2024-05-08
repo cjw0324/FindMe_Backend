@@ -1,13 +1,10 @@
 /*분류별, 지역별, 기간별 습득물 정보 조회 (색상 제외)*/
 package com.findme.FindMeBack.Controller.GetItemController.Police;
-
-
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.findme.FindMeBack.Controller.GetItemController.CommonFunction.Converter;
-import com.findme.FindMeBack.Controller.GetItemController.Police.Dto.PoliceDateDto.Item;
-import com.findme.FindMeBack.Controller.GetItemController.Police.Dto.PoliceDateDto.LostItemsResponse;
-import com.findme.FindMeBack.Controller.GetItemController.Police.Dto.PoliceDateDto.SearchItemsWithDate;
+import com.findme.FindMeBack.Controller.GetItemController.Police.Dto.PoliceDateDto.*;
 import org.springframework.web.bind.annotation.*;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,11 +12,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
-//import static com.findme.FindMeBack.Controller.GetItemController.CommonFunction.Converter.DateJsonToObject;
 
 
 @RestController
@@ -68,26 +61,25 @@ public class PoliceDateController {
         // xml -> JSON -> object 바꾸어 return
         return DateJsonToObject(Converter.xmlToJson(sb.toString()));
     }
-    public static List<Item> DateJsonToObject(String jsonInput) throws JsonProcessingException {
+    public static List<Item> DateJsonToObject(String jsonResponse) {
         ObjectMapper objectMapper = new ObjectMapper();
-        List<Item> itemList = new ArrayList<>();
         try {
-            LostItemsResponse response = objectMapper.readValue(jsonInput, LostItemsResponse.class);
-            if (response != null && response.getResponse() != null && response.getResponse().getBody() != null && response.getResponse().getBody().getItems() != null) {
-                Object apiItems = response.getResponse().getBody().getItems();
-                if (apiItems instanceof List) {
-                    itemList = (List<Item>) apiItems;
-                } else if (apiItems instanceof Map) {
-                    Map<String, Item> itemMap = (Map<String, Item>) apiItems;
-                    itemList = new ArrayList<>(itemMap.values());
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return itemList;
-    }
+            JsonNode rootNode = objectMapper.readTree(jsonResponse);
+            JsonNode itemsNode = rootNode.path("response").path("body").path("items").path("item");
 
+            if (itemsNode.isArray()) {
+                // itemsNode가 배열인 경우, 해당 배열을 List<Item>으로 변환
+                return objectMapper.convertValue(itemsNode, new TypeReference<List<Item>>(){});
+            } else {
+                // 단일 객체인 경우, 이 객체를 포함하는 리스트를 생성
+                Item singleItem = objectMapper.treeToValue(itemsNode, Item.class);
+                return List.of(singleItem);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 
 

@@ -1,14 +1,8 @@
 package com.findme.FindMeBack.Controller.GetItemController.Portal;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-//import com.findme.FindMeBack.Controller.LostFoundController.PoliceLostFoundController.GetLosfundInfoAccTpNmCstdyPlaceController;
-import com.findme.FindMeBack.Controller.GetItemController.Portal.PortalPlaceDto.Item;
-import com.findme.FindMeBack.Controller.GetItemController.Portal.PortalPlaceDto.LostItemsResponse;
-import com.findme.FindMeBack.Controller.GetItemController.Portal.PortalPlaceDto.SearchItemsWithPlace;
-import org.json.JSONObject;
-import org.json.XML;
+import com.findme.FindMeBack.Controller.GetItemController.Portal.Dto.PortalPlaceDto.*;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,21 +14,19 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+
+import static com.findme.FindMeBack.Controller.GetItemController.CommonFunction.Converter.xmlToJson;
 
 @RestController
 public class PortalPlaceController {
 
     @PostMapping("/portal/place")
     public List<Item> FindWithPlace(@RequestParam(required = false) Integer pageNo, @RequestBody SearchItemsWithPlace items) throws IOException {
-        StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1320000/LosfundInfoInqireService/getLosfundInfoAccTpNmCstdyPlace");
+        StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1320000/LosPtfundInfoInqireService/getPtLosfundInfoAccTpNmCstdyPlace");
         urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=8ECKU3vHd0sG4PqlShJ3i5t8igUqcvY5pLJIODwzsvUuYgFh7Gw%2BYb81Zcras26oH6oJY%2FW%2FqznXyBmrG6%2FrcA%3D%3D");
         urlBuilder.append("&" + URLEncoder.encode("PRDT_NM","UTF-8") + "=" + URLEncoder.encode(items.getPRDT_NM() != null ? items.getPRDT_NM() : "", "UTF-8"));
         urlBuilder.append("&" + URLEncoder.encode("DEP_PLACE","UTF-8") + "=" + URLEncoder.encode(items.getDEP_PLACE() != null ? items.getDEP_PLACE() : "", "UTF-8"));
-        //urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8"));
-        //urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode(String.valueOf(pageNo), "UTF-8")); /*페이지 번호*/
         // 페이지 번호 추가
         if (pageNo != null) {
             urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + pageNo);
@@ -60,40 +52,24 @@ public class PortalPlaceController {
         rd.close();
         conn.disconnect();
 
-        return jsonToObject(xmlToJson(sb.toString()), items);
+        return PlaceJsonToObject(xmlToJson(sb.toString()));
     }
 
-    private List<Item> jsonToObject(String jsonInput, SearchItemsWithPlace items) throws JsonProcessingException {
+
+    public static List<Item> PlaceJsonToObject(String jsonResponse) {
         ObjectMapper objectMapper = new ObjectMapper();
-        List<Item> itemList = new ArrayList<>();
         try {
-            LostItemsResponse response = objectMapper.readValue(jsonInput, LostItemsResponse.class);
-            if (response != null && response.getResponse() != null && response.getResponse().getBody() != null && response.getResponse().getBody().getItems() != null) {
-                Object apiItems = response.getResponse().getBody().getItems();
-                if (apiItems instanceof List) {
-                    itemList = (List<Item>) apiItems;
-                } else if (apiItems instanceof Map) {
-                    Map<String, Item> itemMap = (Map<String, Item>) apiItems;
-                    itemList = new ArrayList<>(itemMap.values());
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return itemList;
-    }
+            JsonNode rootNode = objectMapper.readTree(jsonResponse);
+            JsonNode itemsNode = rootNode.path("response").path("body").path("items").path("item");
 
-    private String xmlToJson(String str) {
-        try {
-            if (str == null) {
-                return null;
+            if (itemsNode.isArray()) {
+                // itemsNode가 배열인 경우, 해당 배열을 List<Item>으로 변환
+                return objectMapper.convertValue(itemsNode, new TypeReference<List<Item>>(){});
+            } else {
+                // 단일 객체인 경우, 이 객체를 포함하는 리스트를 생성
+                Item singleItem = objectMapper.treeToValue(itemsNode, Item.class);
+                return List.of(singleItem);
             }
-            String xml = str;
-            JSONObject jObject = XML.toJSONObject(xml);
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.enable(SerializationFeature.INDENT_OUTPUT);
-            Object json = mapper.readValue(jObject.toString(), Object.class);
-            return mapper.writeValueAsString(json);
         } catch (Exception e) {
             e.printStackTrace();
             return null;

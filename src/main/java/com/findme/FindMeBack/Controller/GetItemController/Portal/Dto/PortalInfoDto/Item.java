@@ -1,5 +1,6 @@
-package com.findme.FindMeBack.Controller.GetItemController.Portal.PortalInfoDto;
+package com.findme.FindMeBack.Controller.GetItemController.Portal.Dto.PortalInfoDto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,6 +18,8 @@ public class Item {
     private String fdPlace;          // 습득 장소
     private String fdPrdtNm;         // 물품명
     private String fdSn;             // 습득 순번
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date fdYmd;              // 습득 일자
     private String fndKeepOrgnSeNm; // 습득물 보관 기관 구분명
     private String orgId;            // 기관 아이디

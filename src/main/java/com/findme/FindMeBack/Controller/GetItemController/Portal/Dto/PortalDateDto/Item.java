@@ -1,5 +1,6 @@
-package com.findme.FindMeBack.Controller.GetItemController.Portal.PortalDateDto;
+package com.findme.FindMeBack.Controller.GetItemController.Portal.Dto.PortalDateDto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,8 +15,10 @@ public class Item {
     private String fdPrdtNm;
     private String fdSbjt;
     private String fdSn;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date fdYmd;
     private String prdtClNm;
     private String rnum;
+    private String clrNm;
 
 }
