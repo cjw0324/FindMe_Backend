@@ -1,19 +1,25 @@
 package com.findme.FindMeBack.Entity;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Date;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "PoliceDateItem")
-public class PoliceDateItem {
+@Entity(name = "PortalDateItem")
+public class PortalDateItem {
 
     @Id
     @Column(updatable = false)
-    public String atcId; //아이디 ex) F2024050300003462
+    public String atcId; //아이디 ex) V2024050300003462
 
 
     @Column

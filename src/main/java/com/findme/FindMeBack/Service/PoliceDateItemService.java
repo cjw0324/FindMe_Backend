@@ -21,9 +21,9 @@ public class PoliceDateItemService {
         policeDateItemRepository.saveAll(policeDateItemList);
     }
 
-    public Optional<PoliceDateItem> findByActId(String actid) {
+    public Optional<PoliceDateItem> findByAtcId(String atcid) {
         return Optional.ofNullable(policeDateItemRepository
-                .findByAtcId(actid).orElseThrow(() -> new IllegalArgumentException("NOT FOUND: " + actid)));
+                .findByAtcId(atcid).orElseThrow(() -> new IllegalArgumentException("NOT FOUND: " + atcid)));
     }
 
     public Optional<List<PoliceDateItem>> findAll() {

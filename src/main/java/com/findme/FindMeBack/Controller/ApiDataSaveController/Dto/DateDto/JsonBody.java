@@ -1,4 +1,4 @@
-package com.findme.FindMeBack.Controller.ApiDataSaveController.Dto;
+package com.findme.FindMeBack.Controller.ApiDataSaveController.Dto.DateDto;
 
 import lombok.Getter;
 import lombok.Setter;
