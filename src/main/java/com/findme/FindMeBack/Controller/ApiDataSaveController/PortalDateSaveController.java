@@ -38,7 +38,7 @@ public class PortalDateSaveController {
         urlBuilder.append("&" + URLEncoder.encode("END_YMD","UTF-8") + "=" + URLEncoder.encode(jsonBody.getEND_YMD() != null ? jsonBody.getEND_YMD() : "", "UTF-8"));
         urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8"));
         // 결과 max 1,000,000개로 설정
-        urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("100000", "UTF-8")); /*한 페이지 결과 수*/
+        urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("100", "UTF-8")); /*한 페이지 결과 수*/
 
         // HTTP 연결 설정
         URL url = new URL(urlBuilder.toString());
