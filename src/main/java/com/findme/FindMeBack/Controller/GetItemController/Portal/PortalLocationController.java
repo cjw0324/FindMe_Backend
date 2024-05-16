@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.findme.FindMeBack.Controller.GetItemController.Portal.Dto.PortalLocationDto.*;
 import com.findme.FindMeBack.Controller.GetItemController.Portal.Dto.PortalLocationDto.SearchItemsWithLocation;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,11 +23,14 @@ import static com.findme.FindMeBack.Controller.GetItemController.CommonFunction.
 
 @RestController
 public class PortalLocationController {
+
+    @Value("${my.api.key}")
+    private String apiKey;
     @PostMapping("/portal/location")
     public List<Item> FindWithLocation(@RequestParam(required = false) Integer pageNo, @RequestBody SearchItemsWithLocation items) throws IOException {
         // API URL 생성
         StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1320000/LosPtfundInfoInqireService/getPtLosfundInfoAccToLc");
-        urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=8ECKU3vHd0sG4PqlShJ3i5t8igUqcvY5pLJIODwzsvUuYgFh7Gw%2BYb81Zcras26oH6oJY%2FW%2FqznXyBmrG6%2FrcA%3D%3D");
+        urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=" + apiKey);
         urlBuilder.append("&" + URLEncoder.encode("PRDT_NM","UTF-8") + "=" + URLEncoder.encode(items.getPRDT_NM() != null ? items.getPRDT_NM() : "", "UTF-8"));
         urlBuilder.append("&" + URLEncoder.encode("ADDR","UTF-8") + "=" + URLEncoder.encode(items.getADDR() != null ? items.getADDR() : "", "UTF-8"));
         //urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지 번호*/

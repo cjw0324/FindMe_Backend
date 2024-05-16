@@ -1,7 +1,6 @@
 package com.findme.FindMeBack.Controller.GetItemController.Portal.Dto.PortalLocationDto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.findme.FindMeBack.Controller.GetItemController.Police.Dto.PoliceLocationDto.Items;
 import lombok.Getter;
 import lombok.Setter;
 

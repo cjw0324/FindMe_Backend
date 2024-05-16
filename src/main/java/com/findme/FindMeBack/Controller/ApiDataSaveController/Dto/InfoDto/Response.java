@@ -1,4 +1,4 @@
-package com.findme.FindMeBack.Controller.GetItemController.Portal.Dto.PortalInfoDto;
+package com.findme.FindMeBack.Controller.ApiDataSaveController.Dto.InfoDto;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.findme.FindMeBack.Controller.GetItemController.Police.Dto.PolicePlaceDto.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,11 +19,14 @@ import static com.findme.FindMeBack.Controller.GetItemController.CommonFunction.
 @RestController
 public class PolicePlaceController {
 
+    @Value("${my.api.key}")
+    private String apiKey;
+
     @PostMapping("/police/place")
     public List<Item> PoliceFindWithPlace(@RequestParam(required = false) Integer pageNo, @RequestBody SearchItemsWithPlace items) throws IOException {
         // 경찰청 API URL 생성
         StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1320000/LosfundInfoInqireService/getLosfundInfoAccTpNmCstdyPlace");
-        urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=4CJYgVugQHbEfSLvdMoGGPFz4Ms%2BrbiUxEk555iigL9ledz0QFEjxOD1mXDCTP0Ziu5%2FHJQ2bYkUTshjquNArg%3D%3D");
+        urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=" + apiKey);
         urlBuilder.append("&" + URLEncoder.encode("PRDT_NM","UTF-8") + "=" + URLEncoder.encode(items.getPRDT_NM() != null ? items.getPRDT_NM() : "", "UTF-8"));
         urlBuilder.append("&" + URLEncoder.encode("DEP_PLACE","UTF-8") + "=" + URLEncoder.encode(items.getDEP_PLACE() != null ? items.getDEP_PLACE() : "", "UTF-8"));
 

@@ -12,14 +12,14 @@ import java.util.Date;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "PortalDateItem")
-public class PortalDateItem {
+@NoArgsConstructor
+@Entity(name = "DateItem")
+public class DateItem {
 
     @Id
     @Column(updatable = false)
-    public String atcId; //아이디 ex) V2024050300003462
+    public String atcId; //아이디 ex) F2024050300003462
 
 
     @Column
@@ -42,6 +42,9 @@ public class PortalDateItem {
 
     @Column
     public String clrNm;
+
+    @Column
+    public String N_FD_LCT_CD;
 
 
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.findme.FindMeBack.Controller.GetItemController.Police.Dto.PoliceInfoDto.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,6 +20,9 @@ import static com.findme.FindMeBack.Controller.GetItemController.CommonFunction.
 @RestController
 public class PoliceInfoController {
 
+    @Value("${my.api.key}")
+    private String apiKey;
+
     @PostMapping("/police/info")
     public Item policeFindWithDetail(@RequestBody SearchItemsWithDetail items) throws IOException {
         String ATC_ID = items.getATC_ID();
@@ -26,7 +30,7 @@ public class PoliceInfoController {
 
         // 경찰청 API URL 생성
         StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1320000/LosfundInfoInqireService/getLosfundDetailInfo");
-        urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=4CJYgVugQHbEfSLvdMoGGPFz4Ms%2BrbiUxEk555iigL9ledz0QFEjxOD1mXDCTP0Ziu5%2FHJQ2bYkUTshjquNArg%3D%3D");
+        urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=" + apiKey);
         urlBuilder.append("&" + URLEncoder.encode("ATC_ID", "UTF-8") + "=" + URLEncoder.encode(ATC_ID, "UTF-8")); /*관리ID*/
         urlBuilder.append("&" + URLEncoder.encode("FD_SN", "UTF-8") + "=" + URLEncoder.encode(FD_SN, "UTF-8")); /*습득순번*/
 

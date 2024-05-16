@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.findme.FindMeBack.Controller.GetItemController.CommonFunction.Converter;
 import com.findme.FindMeBack.Controller.GetItemController.Portal.Dto.PortalDateDto.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,11 +23,14 @@ import java.util.List;
 @RestController
 public class PortalDateController {
 
+    @Value("${my.api.key}")
+    private String apiKey;
+
     @PostMapping("/portal/date")
     public List<Item> findWithDate(@RequestParam(required = false) Integer pageNo, @RequestBody SearchItemsWithDate items) throws IOException {
         // API 요청 URL 설정
         StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1320000/LosPtfundInfoInqireService/getPtLosfundInfoAccToClAreaPd");
-        urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=8ECKU3vHd0sG4PqlShJ3i5t8igUqcvY5pLJIODwzsvUuYgFh7Gw%2BYb81Zcras26oH6oJY%2FW%2FqznXyBmrG6%2FrcA%3D%3D");
+        urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=" + apiKey);
         urlBuilder.append("&" + URLEncoder.encode("PRDT_CL_CD_01", "UTF-8") + "=" + URLEncoder.encode(items.getPRDT_CL_CD_01() != null ? items.getPRDT_CL_CD_01() : "", "UTF-8"));
         urlBuilder.append("&" + URLEncoder.encode("PRDT_CL_CD_02", "UTF-8") + "=" + URLEncoder.encode(items.getPRDT_CL_CD_02() != null ? items.getPRDT_CL_CD_02() : "", "UTF-8"));
         urlBuilder.append("&" + URLEncoder.encode("N_FD_LCT_CD", "UTF-8") + "=" + URLEncoder.encode(items.getN_FD_LCT_CD() != null ? items.getN_FD_LCT_CD() : "", "UTF-8"));

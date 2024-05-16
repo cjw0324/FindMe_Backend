@@ -3,6 +3,7 @@ package com.findme.FindMeBack.Controller.GetItemController.Portal;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.findme.FindMeBack.Controller.GetItemController.Portal.Dto.PortalInfoDto.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,12 +16,15 @@ import static com.findme.FindMeBack.Controller.GetItemController.CommonFunction.
 
 @RestController
 public class PortalInfoController {
+    @Value("${my.api.key}")
+    private String apiKey;
+
 
     @PostMapping("/portal/info")
     public Item FindWithDetail(@RequestParam(required = false) Integer pageNo, @RequestBody SearchItemsWithDetail items) throws IOException {
         // 경찰청 API URL 생성
         StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1320000/LosPtfundInfoInqireService/getPtLosfundDetailInfo");
-        urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=8ECKU3vHd0sG4PqlShJ3i5t8igUqcvY5pLJIODwzsvUuYgFh7Gw%2BYb81Zcras26oH6oJY%2FW%2FqznXyBmrG6%2FrcA%3D%3D");
+        urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=" + apiKey);
         urlBuilder.append("&" + URLEncoder.encode("ATC_ID","UTF-8") + "=" + URLEncoder.encode(items.getATC_ID(), "UTF-8"));
         urlBuilder.append("&" + URLEncoder.encode("FD_SN","UTF-8") + "=" + URLEncoder.encode(items.getFD_SN(), "UTF-8"));
 
@@ -60,6 +64,7 @@ public class PortalInfoController {
 
     // JSON 문자열을 객체로 변환하는 메서드
     public static Item DataJsonToObject(String jsonResponse) {
+        System.out.println("jsonResponse = " + jsonResponse);
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             JsonNode rootNode = objectMapper.readTree(jsonResponse);
@@ -67,6 +72,7 @@ public class PortalInfoController {
 
             Item singleItem = objectMapper.treeToValue(itemsNode, Item.class);
             return singleItem;
+
         }catch (Exception e) {
             e.printStackTrace();
             return null;

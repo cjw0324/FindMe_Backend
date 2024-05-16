@@ -6,6 +6,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class JsonBody {
-    public String START_YMD;      // 검색 시작일
-    public String END_YMD;        // 검색 종료일
+
+    public String START_YMD;
+    public String END_YMD;
+    public String ADMIN_KEY;
 }

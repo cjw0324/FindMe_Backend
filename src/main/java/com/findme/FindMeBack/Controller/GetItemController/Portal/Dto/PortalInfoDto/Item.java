@@ -21,7 +21,6 @@ public class Item {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date fdYmd;              // 습득 일자
-    private String fndKeepOrgnSeNm; // 습득물 보관 기관 구분명
     private String orgId;            // 기관 아이디
     private String orgNm;            // 기관명
     private String prdtClNm;         // 물품 분류명
