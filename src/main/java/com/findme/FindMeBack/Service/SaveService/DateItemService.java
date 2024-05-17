@@ -29,6 +29,10 @@ public class DateItemService {
         dateItemRepository.deleteByAtcId(atcid);
     }
 
+    public Long getDateItemCount() {
+        return dateItemRepository.count();
+    }
+
 
 
 }

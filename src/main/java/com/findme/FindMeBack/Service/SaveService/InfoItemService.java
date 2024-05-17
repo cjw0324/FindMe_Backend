@@ -44,6 +44,12 @@ public class InfoItemService {
         infoItemRepository.deleteByAtcId(atcid);
     }
 
+
+    public Long getInfoItemCount() {
+        return infoItemRepository.count();
+    }
+
+
     //////옮긴 시작
 
     @Value("${my.api.key}")
