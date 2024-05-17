@@ -3,8 +3,8 @@ package com.findme.FindMeBack.Controller.S3UploadController;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.findme.FindMeBack.Entity.DateItem;
-import com.findme.FindMeBack.Service.DateItemService;
+import com.findme.FindMeBack.Entity.InfoItem;
+import com.findme.FindMeBack.Service.SaveService.InfoItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +26,7 @@ public class S3FileUploadController {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    private final DateItemService dateItemService;
+    private final InfoItemService infoItemService;
 
 
     public void uploadFileFromUrl(String stringUrl, String imageName) throws IOException {
@@ -54,11 +54,11 @@ public class S3FileUploadController {
 
     @PostMapping
     public void GetDateDbDataForSaveImgToS3() throws IOException {
-        List<DateItem> dateItemList = dateItemService.findAll().get();
-        for (DateItem dateItem : dateItemList) {
-            String originUrl = dateItem.getFdFilePathImg();
+        List<InfoItem> infoItemList = infoItemService.findAll().get();
+        for (InfoItem infoItem : infoItemList) {
+            String originUrl = infoItem.getFdFilePathImg();
             if((originUrl).compareTo("https://www.lost112.go.kr/lostnfs/images/sub/img02_no_img.gif") != 0){  //이미지 없는것 제외.
-                uploadFileFromUrl(originUrl, dateItem.getAtcId());
+                uploadFileFromUrl(originUrl, infoItem.getAtcId());
             }
         }
     }

@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.findme.FindMeBack.Controller.ApiDataSaveController.Dto.DateDto.Item;
 import com.findme.FindMeBack.Controller.ApiDataSaveController.Dto.DateDto.JsonBody;
 import com.findme.FindMeBack.Entity.DateItem;
-import com.findme.FindMeBack.Service.DateItemService;
+import com.findme.FindMeBack.Service.SaveService.DateItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -86,7 +86,7 @@ public class AllDateSaveController {
         urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8"));
         urlBuilder.append("&" + URLEncoder.encode("N_FD_LCT_CD","UTF-8") + "=" + URLEncoder.encode(place, "UTF-8")); /*습득지역*/
         // 결과 max 1,000,000개로 설정
-        urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("10", "UTF-8")); /*한 페이지 결과 수*/
+        urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("1000000", "UTF-8")); /*한 페이지 결과 수*/
 
         // HTTP 연결 설정
         URL url = new URL(urlBuilder.toString());
@@ -125,7 +125,7 @@ public class AllDateSaveController {
             dateItem.setFdFilePathImg(item.getFdFilePathImg()); //8
             dateItem.setFdSn(item.getFdSn()); //9
             dateItem.setRnum(item.getRnum()); //10
-            dateItem.setN_FD_LCT_CD(place);
+            dateItem.setNFdLctCd(place);
             dateItemService.save(dateItem);
         }
     }

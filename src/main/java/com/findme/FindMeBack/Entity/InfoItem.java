@@ -1,16 +1,13 @@
 package com.findme.FindMeBack.Entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
-
 @Getter
 @Setter
 @AllArgsConstructor
@@ -50,7 +47,5 @@ public class InfoItem {
     private String tel;
     @Column
     private String uniq;
-
-    // getters and setters
 }
 

@@ -1,4 +1,4 @@
-package com.findme.FindMeBack.Service;
+package com.findme.FindMeBack.Service.SaveService;
 
 import com.findme.FindMeBack.Entity.DateItem;
 import com.findme.FindMeBack.Repository.DateItemRepository;
@@ -18,6 +18,11 @@ public class DateItemService {
 
     public Optional<List<DateItem>> findAll() {
         return Optional.ofNullable(dateItemRepository.findAll());
+    }
+
+    public List<DateItem> findByNfdLctCd(String locationCode) {
+        List<DateItem> items = dateItemRepository.findByNFdLctCd(locationCode);
+        return items;
     }
 
     public void delete(String atcid) {

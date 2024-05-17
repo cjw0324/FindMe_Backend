@@ -1,8 +1,6 @@
 package com.findme.FindMeBack.Entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -43,8 +41,12 @@ public class DateItem {
     @Column
     public String clrNm;
 
-    @Column
-    public String N_FD_LCT_CD;
+    @Column(name = "n_fd_lct_cd")
+    public String NFdLctCd;
+
+    @ManyToOne
+    @JoinColumn(name = "infoItemAtcId", referencedColumnName = "atcId")
+    private InfoItem infoItem;
 
 
 }
