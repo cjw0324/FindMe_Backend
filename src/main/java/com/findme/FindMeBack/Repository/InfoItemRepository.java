@@ -13,4 +13,6 @@ public interface InfoItemRepository extends JpaRepository<InfoItem, String> {
 
     Optional<InfoItem> findByAtcId(String atcId);
 
+    List<InfoItem> findByCsteSteNm(String csteSteNm);
+
 }

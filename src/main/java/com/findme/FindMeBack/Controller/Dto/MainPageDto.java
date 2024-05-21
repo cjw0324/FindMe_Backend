@@ -9,6 +9,6 @@ import org.springframework.stereotype.Service;
 @Setter
 @RequiredArgsConstructor
 public class MainPageDto {
-    public Long dateTableCount;
-    public Long infoTableCount;
+    public Long foundItemCount;
+    public Long notFoundItemCount;
 }

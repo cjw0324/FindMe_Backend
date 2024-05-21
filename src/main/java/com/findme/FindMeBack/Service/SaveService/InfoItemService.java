@@ -49,6 +49,13 @@ public class InfoItemService {
         return infoItemRepository.count();
     }
 
+    public Long getFoundItemCount(){
+        return (long) infoItemRepository.findByCsteSteNm("종결").size();
+    }
+
+    public Long getNotFoundItemCount() {
+        return (long) infoItemRepository.findByCsteSteNm("보관중").size();
+    }
 
     //////옮긴 시작
 

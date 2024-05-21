@@ -39,7 +39,7 @@ public class SearchFilterService {
         // DateItem을 조건에 맞게 필터링하여 찾습니다.
         List<DateItem> dateItems = dateItemRepository.findByNFdLctCd(NFdLctCd)
                 .stream()
-                .filter(item -> item.getPrdtClNm().contains(productCategory)
+                .filter(item -> (item.getPrdtClNm().contains(productCategory) || item.getPrdtClNm().contains("기타"))
                         && !item.getFdYmd().before(ymd)) // ymd와 동일하거나 이후 날짜 필터링
                 .collect(Collectors.toList());
 
@@ -53,7 +53,7 @@ public class SearchFilterService {
                     .map(infoItemRepository::findByAtcId) // Optional<InfoItem> 반환
                     .filter(Optional::isPresent) // 값이 존재하는 Optional만 필터링
                     .map(Optional::get) // Optional에서 실제 InfoItem 추출
-                    .filter(infoItem -> (infoItem.getFdPlace().equals(foundPlace) || infoItem.getFdPlace().equals("기타")|| infoItem.getFdPlace().equals("불상")|| infoItem.getFdPlace().equals("노상")) && infoItem.getCsteSteNm().equals("보관중") && infoItem.getOrgNm().contains(newPlaceKeyWord)) // InfoItem에서 fdPlace 조건 필터링
+                    .filter(infoItem -> (infoItem.getFdPlace().equals(foundPlace) || infoItem.getFdPlace().equals("기타")|| infoItem.getFdPlace().equals("불상")) && infoItem.getCsteSteNm().equals("보관중") && infoItem.getOrgNm().contains(newPlaceKeyWord)) // InfoItem에서 fdPlace 조건 필터링
                     .collect(Collectors.toList()); // InfoItem 객체를 List에 수집
 
             return infoItems;
