@@ -12,11 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
-import java.util.Optional;
-
 
 
 @Service
@@ -25,7 +22,7 @@ public class SearchFilterService {
     private final DateItemRepository dateItemRepository;
     private final InfoItemRepository infoItemRepository;
 
-    public List<InfoItem> searchFilter(String NFdLctCd, String productCategory, String foundPlace, String dateYmd, String placeKeyWord, String etc) throws ParseException { //etc가 1이면 기타,불상 포함.
+    public List<InfoItem> searchFilter(String NFdLctCd, String productCategory, String foundPlace, String dateYmd, String placeKeyWord, String placeEtc, String itemEtc) throws ParseException { //etc가 1이면 기타,불상 포함.
         String newPlaceKeyWord;     //선택안함 (placeKeyWord) 입력 안할 시 기본값 "none"
         if (placeKeyWord.equals("none")) {
             newPlaceKeyWord = "";
@@ -36,18 +33,29 @@ public class SearchFilterService {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         Date ymd = formatter.parse(dateYmd);
 
-        // DateItem을 조건에 맞게 필터링하여 찾습니다.
-        List<DateItem> dateItems = dateItemRepository.findByNFdLctCd(NFdLctCd)
-                .stream()
-                .filter(item -> (item.getPrdtClNm().contains(productCategory) || item.getPrdtClNm().contains("기타"))
-                        && !item.getFdYmd().before(ymd)) // ymd와 동일하거나 이후 날짜 필터링
-                .collect(Collectors.toList());
+        List<DateItem> dateItems;
 
+        if(itemEtc.equals("1")){
+            System.out.println("itemEtc = 1");
+            dateItems = dateItemRepository.findByNFdLctCd(NFdLctCd)
+                    .stream()
+                    .filter(item -> (item.getPrdtClNm().contains(productCategory) || item.getPrdtClNm().contains("기타"))
+                            && !item.getFdYmd().before(ymd)) // ymd와 동일하거나 이후 날짜 필터링
+                    .collect(Collectors.toList());
+        } else{
+            System.out.println("itemEtc = 0");
+            dateItems = dateItemRepository.findByNFdLctCd(NFdLctCd)
+                    .stream()
+                    .filter(item -> (item.getPrdtClNm().contains(productCategory))
+                            && !item.getFdYmd().before(ymd)) // ymd와 동일하거나 이후 날짜 필터링
+                    .collect(Collectors.toList());
+        }
+        // DateItem을 조건에 맞게 필터링하여 찾습니다.
 
         // 찾은 DateItem 객체들로부터 atcId 리스트를 추출합니다.
         List<String> atcIds = dateItems.stream().map(DateItem::getAtcId).collect(Collectors.toList());
 
-        if (etc.equals("1")) {
+        if (placeEtc.equals("1")) {
             // atcId 리스트를 기반으로 각 atcId에 해당하는 InfoItem을 찾아서 리스트로 반환합니다.
             List<InfoItem> infoItems = atcIds.stream()
                     .map(infoItemRepository::findByAtcId) // Optional<InfoItem> 반환

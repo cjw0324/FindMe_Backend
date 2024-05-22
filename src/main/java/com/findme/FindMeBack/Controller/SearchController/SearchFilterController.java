@@ -24,14 +24,15 @@ public class SearchFilterController {
             @RequestParam String productCategory,
             @RequestParam String foundPlace,
             @RequestParam String ymd,
-            @RequestParam String etc,
+            @RequestParam String placeEtc,
+            @RequestParam String itemEtc,
             @PathVariable int page
     ) throws ParseException {
-        System.out.println(nfdlctcd+","+productCategory+","+productCategory+","+foundPlace+","+ymd+","+etc);
+        System.out.println(nfdlctcd+","+placekeyword+","+productCategory+","+foundPlace+","+ymd+","+placeEtc+", "+itemEtc);
         int pageSize = 10; // 페이지당 아이템 수
         int offset = (page - 1) * pageSize; // 오프셋 계산
 
-        List<InfoItem> items =  searchFilterService.searchFilter(nfdlctcd, productCategory, foundPlace, ymd, placekeyword.trim(), etc); //place 앞, 뒤 공백 제거(trim)
+        List<InfoItem> items =  searchFilterService.searchFilter(nfdlctcd, productCategory, foundPlace, ymd, placekeyword.trim(), placeEtc, itemEtc); //place 앞, 뒤 공백 제거(trim)
         Long totalResultCounts = (long) items.size();
         List<InfoItem> paginatedItems = items.subList(offset, Math.min(offset + pageSize, items.size())); // 페이지네이션
 
