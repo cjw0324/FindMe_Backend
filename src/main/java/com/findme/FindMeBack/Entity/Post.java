@@ -28,6 +28,9 @@ public class Post {
     @Column(nullable = false)
     private String foundPlace; // 습득장소
 
+    @Column(nullable = false)
+    private String adress; // 습득주소지
+
 //    @Column(nullable = false)
 //    private LocalDateTime date; // 작성일자
 

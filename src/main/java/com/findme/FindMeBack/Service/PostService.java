@@ -2,6 +2,7 @@ package com.findme.FindMeBack.Service;
 
 import com.findme.FindMeBack.Entity.Post;
 import com.findme.FindMeBack.Repository.PostRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +24,14 @@ public class PostService {
     }
 
     public Post getPostById(Long id) {
+        incrementViews(id);
         Optional<Post> optionalPost = postRepository.findById(id);
         return optionalPost.orElse(null);
+    }
+
+    @Transactional
+    public void incrementViews(Long id) {
+        postRepository.incrementViews(id);
     }
 
     public Post updatePost(Long id, Post postDetails) {
@@ -36,8 +43,10 @@ public class PostService {
             post.setFoundPlace(postDetails.getFoundPlace());
             post.setImgPath(postDetails.getImgPath());
             post.setPostType(postDetails.getPostType());
+            post.setAdress(postDetails.getAdress());
             //post.setShown(postDetails.isShown()); // shown 값 업데이트
-            post.setViews(postDetails.getViews());
+            //post.setViews(postDetails.getViews());
+            post.setViews(post.getViews());
             return postRepository.save(post);
         }
         return null;
