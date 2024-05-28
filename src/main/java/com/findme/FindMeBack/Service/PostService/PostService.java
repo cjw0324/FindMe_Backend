@@ -1,6 +1,7 @@
-package com.findme.FindMeBack.Service;
+package com.findme.FindMeBack.Service.PostService;
 
 import com.findme.FindMeBack.Entity.Post;
+import com.findme.FindMeBack.Entity.PostType;
 import com.findme.FindMeBack.Repository.PostRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,11 @@ public class PostService {
         incrementViews(id);
         Optional<Post> optionalPost = postRepository.findById(id);
         return optionalPost.orElse(null);
+    }
+
+    public List<Post> findByPostTypeIs(PostType pt){
+        List<Post> findByPostTypeList = postRepository.findByPostType(pt);
+        return findByPostTypeList;
     }
 
     @Transactional
@@ -63,43 +69,3 @@ public class PostService {
         }
     }
 }
-
-
-//package com.findme.FindMeBack.Service;
-//
-//import com.findme.FindMeBack.Entity.Post;
-//import com.findme.FindMeBack.Repository.PostRepository;
-//import lombok.RequiredArgsConstructor;
-//import org.springframework.stereotype.Service;
-//
-//import java.util.List;
-//import java.util.Optional;
-//
-//@Service
-//@RequiredArgsConstructor
-//public class PostService {
-//
-//    private final PostRepository postRepository;
-//
-//    public List<Post> getAllPosts() {
-//        return postRepository.findAll();
-//    }
-//
-//    public Post getPostById(Long id) {
-//        Optional<Post> post = postRepository.findById(id);
-//        return post.orElse(null);
-//    }
-//
-//    public Post createPost(Post post) {
-//        return postRepository.save(post);
-//    }
-//
-//    public Post updatePost(Long id, Post post) {
-//        post.setId(id); // 설정된 ID를 갖도록 설정
-//        return postRepository.save(post);
-//    }
-//
-//    public void deletePost(Long id) {
-//        postRepository.deleteById(id);
-//    }
-//}

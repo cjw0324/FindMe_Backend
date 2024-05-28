@@ -31,9 +31,6 @@ public class Post {
     @Column(nullable = false)
     private String adress; // 습득주소지
 
-//    @Column(nullable = false)
-//    private LocalDateTime date; // 작성일자
-
     @Column(nullable = false)
     private LocalDateTime date = LocalDateTime.now(); // 작성일자, 현재 시각으로 초기화
 
