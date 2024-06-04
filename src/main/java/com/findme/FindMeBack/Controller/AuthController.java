@@ -1,5 +1,7 @@
 package com.findme.FindMeBack.Controller;
 
+import com.findme.FindMeBack.Controller.Dto.MainPageDto;
+import com.findme.FindMeBack.Controller.Dto.MyPageDto;
 import com.findme.FindMeBack.Entity.User;
 import com.findme.FindMeBack.Service.AuthService;
 import com.findme.FindMeBack.Service.UserService;
@@ -37,28 +39,38 @@ public class AuthController {
         return ResponseEntity.ok(token);
     }
 
+//    @PostMapping("/myPage")
+//    public MyPageDto mypage(@RequestBody Map<String, String> request) throws GeneralSecurityException, IOException {
+//        MyPageDto myPageDto = new MyPageDto();
+//        String token = request.get("token");
+//        System.out.println("token = " + token);
+//        myPageDto.setUsername(authService.getUsernameFromToken(token));
+//        myPageDto.setEmail(authService.getEmailFromUsername(myPageDto.username));
+//        myPageDto.setEmail(authService.getPictureFromUsername(myPageDto.username));
+//        return myPageDto;
+//    }
     @PostMapping("/google")
     public ResponseEntity<?> googleLogin(@RequestBody Map<String, String> request) throws GeneralSecurityException, IOException {
         String token = request.get("token");
         System.out.println("token = " + token);
         if (authService.verifyGoogleToken(token)) {
-            System.out.println("AuthController.googleLogin_1");
+//            System.out.println("AuthController.googleLogin_1");
             String username = authService.getUsernameFromToken(token);
             if (username != null) {
-                System.out.println("AuthController.googleLogin_2");
+//                System.out.println("AuthController.googleLogin_2");
                 String jwtToken = authService.generateJwtToken(username);
 
                 Map<String, String> response = new HashMap<>();
                 response.put("token", jwtToken);
                 response.put("message", "Login successful");
-                System.out.println("AuthController.googleLogin_999");
+//                System.out.println("AuthController.googleLogin_999");
                 return ResponseEntity.ok(response);
             } else {
-                System.out.println("AuthController.googleLogin_3");
+//                System.out.println("AuthController.googleLogin_3");
                 return ResponseEntity.status(401).body("Failed to get username from token");
             }
         } else {
-            System.out.println("AuthController.googleLogin_4");
+//            System.out.println("AuthController.googleLogin_4");
             return ResponseEntity.status(401).body("Invalid Google token");
         }
     }

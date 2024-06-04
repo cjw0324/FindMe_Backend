@@ -60,6 +60,13 @@ public class AuthService implements UserDetailsService {
         return idToken.getPayload().getEmail();
     }
 
+    public String getEmailFromUsername(String username){
+        return userRepository.findByUsername(username).get().getEmail();
+    }
+    public String getPictureFromUsername(String username){
+        return userRepository.findByUsername(username).get().getPicture();
+    }
+
     public String generateJwtToken(String username) {
         return jwtUtil.generateToken(username);
     }
