@@ -39,16 +39,6 @@ public class AuthController {
         return ResponseEntity.ok(token);
     }
 
-//    @PostMapping("/myPage")
-//    public MyPageDto mypage(@RequestBody Map<String, String> request) throws GeneralSecurityException, IOException {
-//        MyPageDto myPageDto = new MyPageDto();
-//        String token = request.get("token");
-//        System.out.println("token = " + token);
-//        myPageDto.setUsername(authService.getUsernameFromToken(token));
-//        myPageDto.setEmail(authService.getEmailFromUsername(myPageDto.username));
-//        myPageDto.setEmail(authService.getPictureFromUsername(myPageDto.username));
-//        return myPageDto;
-//    }
     @PostMapping("/google")
     public ResponseEntity<?> googleLogin(@RequestBody Map<String, String> request) throws GeneralSecurityException, IOException {
         String token = request.get("token");

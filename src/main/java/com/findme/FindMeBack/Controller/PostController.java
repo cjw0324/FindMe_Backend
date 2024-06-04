@@ -13,7 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/posts")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000")
+//@CrossOrigin(origins = "http://localhost:3000")
 public class PostController {
 
     private final PostService postService;
@@ -30,14 +30,14 @@ public class PostController {
         return ResponseEntity.ok(posts);
     }
 
-    @GetMapping("/lost")
+    @GetMapping("/lost") //분실물 게시글 전체 조회
     public ResponseEntity<List<Post>> getAllLostPosts() {
         List<Post> posts = postService.findByPostTypeIs(PostType.LOST);
         System.out.println(posts.toString());
         return ResponseEntity.ok(posts);
     }
 
-    @GetMapping("/found")
+    @GetMapping("/found") //습득물 게시글 전체 조회
     public ResponseEntity<List<Post>> getAllFoundPosts() {
         List<Post> posts = postService.findByPostTypeIs(PostType.FOUND);
         return ResponseEntity.ok(posts);

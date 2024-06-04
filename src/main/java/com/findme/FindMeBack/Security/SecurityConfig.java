@@ -34,7 +34,7 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable()).cors(cors -> cors.disable());
         http.authorizeRequests()
 //                .requestMatchers("/main","/api/auth/**","/login", "/oauth2/**").permitAll()  // Corrected method chain
-                .requestMatchers("/main","/search/**","/info/**","/find/**","/api/auth/**","/login", "/oauth2/**").permitAll()  // Corrected method chain
+                .requestMatchers("/main","/search/**","/info/**","/find/**","/api/auth/**","/login", "/oauth2/**", "posts/**").permitAll()  // Corrected method chain
                 .anyRequest().authenticated()
                 .and()
 //                .oauth2Login(oauth2 -> oauth2.loginPage("/login").defaultSuccessUrl("http://localhost:3000/loginSuccess", true).successHandler(loginSuccessHandler).failureUrl("http://localhost:3000/loginFailure"))
